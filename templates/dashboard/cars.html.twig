@@ -1,0 +1,43 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h3 class="mb-3">Cars</h3>
+        <form action="{{ path('app_dashboard_car', {id: 'new'}) }}">
+            <button class="submit-button"><i class="fa fa-plus"></i></button>
+        </form>
+    </div>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if cars|default %}
+            {% for car in cars %}
+                <tr>
+                    <td style="width: 25%">{% if car.image|default %}<img src="{{ car.image }}" alt="{{ car.name }}" width="100%">{% else %}No image{% endif %}</td>
+                    <td class="align-middle">{{ car.name }}</td>
+                    <td class="align-middle">In garage</td>
+                    <td class="align-middle"><a href="{{ path('app_dashboard_car', {id: car.id}) }}">View</a> </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>No cars found</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}

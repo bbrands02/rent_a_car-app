@@ -1,0 +1,152 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+
+    {# Form to delete object #}
+    <form action="{{ path('app_dashboard_delete') }}" method="post">
+        <h3 class="mb-3 ">{{ item.car.name~' rented by '~item.rentedBy.firstName }}
+            <button class="float-right" name="id" value="{{ item.id }}"><i
+                        class="delete-obj-button fa fa-trash"></i>
+            </button>
+            <input type="hidden" name="type" value="rental">
+            <input type="hidden" name="returnRoute" value="app_dashboard_rentals">
+        </h3>
+    </form>
+
+    <div class="row">
+        <div class="{% if item.car.image|default %}col-12 col-md-6 {% else %}col-12 col-md-6 offset-md-3 {% endif %}">
+
+            {# Form to save object #}
+            <form method="post" action="{{ path('app_dashboard_saverental', {id: item.id}) }}" id="rentalForm"
+                  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="rentalStatus">Status</label>
+                    <select id="rentalStatus" class="form-control" name="status"
+                            required>
+                        <option value="pending"
+                                {% if item.status|default and item.status == 'pending' %}selected=""{% endif %}>Pending
+                        </option>
+                        <option value="accepted"
+                                {% if item.status|default and item.status == 'accepted' %}selected=""{% endif %}>
+                            Accepted
+                        </option>
+                        <option value="rented"
+                                {% if item.status|default and item.status == 'rented' %}selected=""{% endif %}>Rented
+                        </option>
+                        <option value="returned"
+                                {% if item.status|default and item.status == 'returned' %}selected=""{% endif %}>
+                            Returned
+                        </option>
+                        <option value="finished"
+                                {% if item.status|default and item.status == 'finished' %}selected=""{% endif %}>
+                            Finished
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rentalDescription">Customer</label>
+                    <p>{{ item.rentedBy.firstName~' '~item.rentedBy.lastName }}</p>
+                </div>
+
+                {% if item.rentedBy.emails|default %}
+                    <div class="form-group">
+                        <label for="rentalDescription">Customers e-mails</label>
+                        <ul>
+                            {% for email in item.rentedBy.emails %}
+                                <li><a href="mailto:{{ email }}">{{ email }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                {% if item.rentedBy.phoneNumbers|default %}
+                    <div class="form-group">
+                        <label for="rentalDescription">Customers phonenumbers</label>
+                        <ul>
+                            {% for phone in item.rentedBy.phoneNumbers %}
+                                <li>{{ phone }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <p>{{ 'From '~item.startDate|date~' till '~item.endDate|date }}</p>
+
+                <div class="form-group">
+                    {% if item.id|default %}
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                    {% endif %}
+                    <button type="submit" class="form-control col-md-4 hover-cursor">Opslaan</button>
+                </div>
+            </form>
+        </div>
+        {% if item.car.image|default %}
+            <div class="col-12 col-md-6">
+                {% if item.car.image|default %}
+                    <img style="margin-top: 32px" src="{{ item.car.image }}" alt="{{ item.car.name }}" width="100%">
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        var previewImg = document.getElementById('previewImg');
+        var rentalImageInput = document.getElementById('rentalImage');
+        var addFeatureInput = document.getElementById('addFeatureInput');
+        var featuresDiv = document.getElementById('featuresDiv');
+        var addFeatureButton = document.getElementById('addFeatureButton');
+        var rentalForm = document.getElementById('rentalForm');
+        var featureCount = 0;
+
+        {% if item.features|default %}
+        featureCount = {{ item.features|length }};
+        {% endif %}
+
+        // To-do check file type
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    previewImg.setAttribute('src', e.target.result);
+                    previewImg.style.display = 'block';
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        rentalImageInput.addEventListener('input', function () {
+            readURL(this);
+        });
+
+        function addFeature() {
+            if (addFeatureInput.value != '') {
+                let li = document.createElement('li');
+                li.classList.add('my-2');
+                li.id = 'featureLi' + featureCount;
+                li.innerHTML = addFeatureInput.value + "<button type=\"button\" class=\"float-right\" onclick=\"removeFeature(" + featureCount + ")\"><i class=\"fa fa-trash\"></i></button>";
+                featuresDiv.append(li);
+
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'features[]';
+                input.value = addFeatureInput.value;
+                featuresDiv.append(input);
+                featureCount = featureCount + 1;
+            }
+            addFeatureInput.focus();
+            addFeatureInput.value = '';
+        }
+
+        function removeFeature(index) {
+            let li = document.getElementById('featureLi' + index);
+            let input = document.getElementById('featureInput' + index);
+            li.parentNode.removeChild(li);
+            input.parentNode.removeChild(input);
+        }
+    </script>
+
+{% endblock %}

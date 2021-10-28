@@ -1,0 +1,9 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <h3 class="mb-3 text-center">Meest bekeken auto's</h3>
+
+    {% include 'widgets/carousel.html.twig' with {'items': cars, 'path': 'app_car_car'} %}
+
+{% endblock %}

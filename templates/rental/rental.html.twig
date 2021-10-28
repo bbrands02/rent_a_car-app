@@ -1,0 +1,34 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6 h-100 d-inline-block">
+            <h3>{% if rental.car.name|default %}{{ rental.car.name }}{% if rental.color|default %}{{ ' | '~rental.color|capitalize }}{% endif %}{% else %}No name found{% endif %}</h3>
+            {% if rental.description|default %}<p>{{ rental.description }}</p>{% endif %}
+
+            <br>
+
+            <h4>Status: {{ rental.status|capitalize }}</h4>
+
+            <p>Start date rental: {{ rental.startDate|date  }}</p>
+            <p>End date rental: {{ rental.endDate|date  }}</p>
+
+            <h4>Total cost: &euro; {{ (rental.price/100)|number_format(2) }},-</h4>
+            
+            <div class="form-group">
+                <a href="{{ path('app_rental_downloadrental', {id: rental.id}) }}">
+                    <button id="invoiceButton" class="btn btn-lg btn-primary submit-button mt-3" type="download">
+                         Download invoice
+                    </button>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="col-md-6 text-center">
+            <img src="{{ asset(rental.car.image) }}" width="100%">
+        </div>
+    </div>
+
+{% endblock %}

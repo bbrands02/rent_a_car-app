@@ -1,0 +1,21 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+
+    {% if item.id|default %}
+        {# Form to delete object #}
+        <form action="{{ path('app_dashboard_delete') }}" method="post">
+            <h3 class="mb-3 ">{{ item.person.firstname }}
+                <button class="float-right" name="id" value="{{ item.id }}"><i
+                            class="delete-obj-button fa fa-trash"></i>
+                </button>
+                <input type="hidden" name="type" value="user">
+                <input type="hidden" name="returnRoute" value="app_dashboard_users">
+            </h3>
+        </form>
+    {% else %}
+        <h3 class="mb-3 ">{{ item.person.firstname }}</h3>
+    {% endif %}
+
+{% endblock %}

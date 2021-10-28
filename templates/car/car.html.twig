@@ -1,0 +1,137 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6 h-100 d-inline-block">
+            <h3>{% if car.name|default %}{{ car.name }}{% if car.color|default %}{{ ' | '~car.color|capitalize }}{% endif %}{% else %}No name found{% endif %}</h3>
+            {% if car.description|default %}<p>{{ car.description }}</p>{% endif %}
+
+            {% if car.features|default %}
+                <ul class="list-group list-group-flush pt-4">
+                    {% for feature in car.features %}
+                        <li class="list-group-item px-0"
+                            style="color: var(--primary-color); background: var(--primary-bg); border-color: var(--primary-color)">
+                            {{ feature }}
+                            <i style="color: limegreen" class="fa fa-check float-right pr-2"></i>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="{{ asset(car.image) }}" width="100%">
+            {% if car.price|default %}
+                <h4>&euro; {{ (car.price/100)|number_format(2) }},- p.d.</h4>
+
+                {% if car.rentable|default and car.rentable > 0 %}
+                    <button type="button" class="btn btn-primary w-50" data-toggle="modal" data-target="#huurModal">
+                        Huren
+                    </button>
+                {% else %}
+                    <p class="h4">Currently unavailable</p>
+
+                {% endif %}
+            {% endif %}
+
+
+        </div>
+    </div>
+
+    {% if car.price|default and car.rentable|default and car.rentable > 0 %}
+        <div class="modal fade" id="huurModal" tabindex="-1" aria-labelledby="huurModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content" action="{{ path('app_car_rent', {id: car.id}) }}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="huurModalLabel" style="color: black;">
+                            Rent {% if car.name|default %}{{ car.name }}{% endif %}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="startDateInput" style="color: black;">From</label>
+                            <input onchange="checkDates()" min="{{ 'now'|date("Y-m-d") }}"
+                                   value="{{ 'now'|date("Y-m-d") }}" class="form-control" type="date" name="startDate"
+                                   id="startDateInput">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDateInput" style="color: black;">Till</label>
+                            <input onchange="checkDates()" min="{{ 'now'|date('Y-m-d') }}"
+                                   value="{{ 'now'|date("Y-m-d") }}" class="form-control"
+                                   type="date" name="endDate"
+                                   id="endDateInput">
+                        </div>
+
+                        <p class="text-center standard-colors h4" id="priceP">
+                            &euro; {{ (car.price/100)|number_format(2) }},-</p>
+                    </div>
+                    <div class="modal-footer">
+
+                        {% if app.user|default %}
+                            <button type="submit" class="btn btn-primary hover-cursor">Rent</button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary hover-cursor"><a style="color: white" href="{{ path('app_login') }}">Login</a></button>
+                        {% endif %}
+                        <button type="button" class="btn btn-secondary hover-cursor" data-dismiss="modal">Close</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            var startDateInput = document.getElementById('startDateInput');
+            var endDateInput = document.getElementById('endDateInput');
+            var priceP = document.getElementById('priceP');
+            var lastStartDate = startDateInput.min;
+            var lastEndDate = null;
+            var lastStartDateFormatted = null;
+            var lastEndDateFormatted = null;
+
+            function checkDates() {
+                let startDate = startDateInput.value.split("-");
+                lastStartDate = new Date(startDate);
+                let endDate = endDateInput.value.split("-");
+                lastEndDate = new Date(endDate);
+
+                lastStartDateFormatted = formatDate(lastStartDate);
+                lastEndDateFormatted = formatDate(lastEndDate);
+
+                let differenceInDays;
+                if (lastStartDate.getTime() > lastEndDate.getTime()) {
+                    endDateInput.min = lastStartDateFormatted
+                    endDateInput.value = lastStartDateFormatted
+
+                    differenceInDays = 1;
+                } else {
+                    differenceInDays = (lastEndDate.getTime() - lastStartDate.getTime()) / (1000 * 3600 * 24);
+                }
+
+                priceP.innerText = '\u20AC' + ' ' + (differenceInDays * {{ (car.price/100)|number_format(2) }}).toFixed(2).toString() + ',-';
+
+
+                // console.log(lastStartDate);
+                // console.log(lastEndDate);
+                // console.log(differenceInDays);
+            }
+
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+
+                return [year, month, day].join('-');
+            }
+        </script>
+    {% endif %}
+
+{% endblock %}

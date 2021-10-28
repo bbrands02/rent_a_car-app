@@ -1,0 +1,40 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h3 class="mb-3">Users</h3>
+        <form action="{{ path('app_dashboard_user', {'id': 'new'}) }}">
+            <button class="submit-button"><i class="fa fa-plus"></i></button>
+        </form>
+    </div>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Roles</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if users|default %}
+        {% for user in users %}
+        <tr>
+            <td>{{ user.person.firstname~' '~user.person.lastname }}</td>
+            <td>{% for role in user.roles %}{{ role~', ' }}{% endfor %}</td>
+            <td class="align-middle"><a href="{{ path('app_dashboard_user', {id: user.id}) }}">View</a> </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>No users found</td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}

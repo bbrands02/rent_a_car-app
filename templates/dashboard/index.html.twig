@@ -1,0 +1,74 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Dashboard</h3>
+            <div class="d-flex justify-content-center mt-5">
+                <i style="font-size: 70px" class="fa fa-money"></i>
+            </div>
+            <div class="custom-profits-card d-flex justify-content-center">
+                <span style="font-size: 30px; border-bottom: 1px solid var(--primary-color)">&euro; 174.34,-</span>
+            </div>
+            <div class="custom-profits-card d-flex justify-content-center mt-2">
+                <span style="font-size: 15px">5-11-2020</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="rentalsChart" style="height: 370px; width: 100%;"></div>
+        </div>
+    </div>
+
+    <div style="margin-top: 75px" class="row">
+        <div class="col-md-3">
+            <a href="{{ path('app_dashboard_users') }}">
+                <div class="custom-entity-bg col-8 offset-2">
+                    <div style="" class="d-flex justify-content-center pt-4">
+                        <i class="custom-card-i fa fa-user"></i>
+                    </div>
+                    <div style="" class="d-flex justify-content-center pb-4">
+                        <span class="custom-card-span"><b>Users</b></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('app_dashboard_cars') }}">
+                <div class="custom-entity-bg col-8 offset-2">
+                    <div style="" class="d-flex justify-content-center pt-4">
+                        <i class="custom-card-i fa fa-car"></i>
+                    </div>
+                    <div style="" class="d-flex justify-content-center pb-4">
+                        <span class="custom-card-span"><b>Cars</b></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('app_dashboard_rentals') }}">
+                <div class="custom-entity-bg col-8 offset-2">
+                    <div style="" class="d-flex justify-content-center pt-4">
+                        <i class="custom-card-i fa fa-arrow-circle-o-right"></i>
+                    </div>
+                    <div style="" class="d-flex justify-content-center pb-4">
+                        <span class="custom-card-span"><b>Rentals</b></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('app_dashboard_cars') }}">
+                <div class="custom-entity-bg col-8 offset-2">
+                    <div style="" class="d-flex justify-content-center pt-4">
+                        <i class="custom-card-i fa fa-car"></i>
+                    </div>
+                    <div style="" class="d-flex justify-content-center pb-4">
+                        <span class="custom-card-span"><b>Cars</b></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <script src="{{ asset('js/rentals_chart.js') }}"></script>
+{% endblock %}

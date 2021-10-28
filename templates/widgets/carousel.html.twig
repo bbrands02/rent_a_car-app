@@ -1,0 +1,26 @@
+{% if items is defined and items is not empty %}
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% set i = 0 %}
+            {% for item in items %}
+                {% set i = i + 1 %}
+                <div class="carousel-item {% if i == 1 %}active{% endif %} text-center">
+                    <img class="d-block w-100" src="{{ item.image }}" alt="image" height="600px">
+                    {% if path|default %}
+                        <a class="carousel-link col-4" href="{{ path(path, {id: item.id}) }}">Bekijken</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+{% else %}
+    <p class="text-center">No items have been found.</p>
+{% endif %}

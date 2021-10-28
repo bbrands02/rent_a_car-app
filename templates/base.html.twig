@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        {# If there is an title being given from the controller show it, otherwise only the app_name. #}
+        {% if title|default %}
+            <title>{{ title|title~" | "~app_name }}</title>
+        {% else %}
+            <title>{{ app_name }}</title>
+        {% endif %}
+    {% endblock %}
+
+    {% block stylesheets %}
+        {# Favicons #}
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
+
+        {# CSS #}
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/leaflet.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+              rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        {# JS #}
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin=""></script>
+    {% endblock %}
+</head>
+<body>
+
+{% block body %}
+{% endblock %}
+
+{% block javascripts %}
+    {# JS #}
+    <script type="text/javascript" rel="script" src="{{ asset('js/darkmode.js') }}"></script>
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/canvas.min.js') }}"></script>
+{% endblock %}
+</body>
+</html>

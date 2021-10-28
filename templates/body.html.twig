@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% include 'menu/header.html.twig' %}
+    <div class="wrapper-background">
+        <div id="wrapper" class="col-xs-12 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2 p-5">
+
+            {% if breadcrumbs|default %}
+                <nav style="margin-top: -37px" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        {% for bc in breadcrumbs %}
+                            <li class="breadcrumb-item {% if bc.active|default and bc.active == true %}active{% endif %}"
+                                    {% if bc.active|default and bc.active == true %}
+                            aria-current="{% if bc.name|default %}{{ bc.name }}{% endif %}"{% endif %}>
+                                {% if bc.path|default %}
+                                <a href="{{ bc.path }}">{% endif %}
+                                    {% if bc.name|default %}{{ bc.name }}{% endif %}{% if bc.path|default %}</a>{% endif %}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </nav>
+            {% endif %}
+
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
+    </div>
+
+    {% include 'menu/footer.html.twig' %}
+
+{% endblock %}

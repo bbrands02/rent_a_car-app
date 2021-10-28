@@ -1,0 +1,22 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <h4>Our cars:</h4>
+    <div class="row">
+        {% for car in cars %}
+{#            {% if car.rentable|default and car.rentable > 0 %}#}
+
+                <div class="col-4 text-center">
+                    <a href="{{ path('app_car_car', {'id': car.id}) }}">
+                        {% if car.image|default %}<img src="{{ car.image }}" alt="{{ car.name }}" width="100%"
+                                                       style="min-height: 225px">{% else %}No image{% endif %}<br>
+                        <h5 class="pt-2">{{ car.name }}</h5>
+                    </a>
+                </div>
+{#            {% endif %}#}
+
+        {% endfor %}
+    </div>
+
+{% endblock %}

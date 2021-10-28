@@ -1,0 +1,38 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-7">
+            <h3>The user page</h3>
+
+            Your main email: {{ app.user.email }}
+            <br>
+            Your naam: {{ app.user.person.firstName }} {{ app.user.person.lastName }}
+            <br>
+            Your email adresses:
+            {% if app.user.person.emails|default %}
+                <ul>
+                    {% for email in app.user.person.emails %}
+                        <li>{{ email }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                You have no email adresses.
+            {% endif %}
+            <br>
+            Your phone numbers:
+            {% if app.user.person.phoneNumbers|default %}
+                <ul>
+                    {% for number in app.user.person.phoneNumbers %}
+                        <li>{{ number }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                You have no email adresses.
+            {% endif %}
+        </div>
+        <div class="col-md-5">
+        </div>
+    </div>
+{% endblock %}

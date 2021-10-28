@@ -1,0 +1,167 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+
+    {% if item.id|default %}
+        {# Form to delete object #}
+        <form action="{{ path('app_dashboard_delete') }}" method="post">
+            <h3 class="mb-3 ">{{ item.name }}
+                <button class="float-right" name="id" value="{{ item.id }}"><i
+                            class="delete-obj-button fa fa-trash"></i>
+                </button>
+                <input type="hidden" name="type" value="car">
+                <input type="hidden" name="returnRoute" value="app_dashboard_cars">
+            </h3>
+        </form>
+    {% else %}
+        <h3 class="mb-3 ">{{ item.name }}</h3>
+    {% endif %}
+
+    <div class="row">
+        <div class="{% if item.image|default %}col-12 col-md-6 {% else %}col-12 col-md-6 offset-md-3 {% endif %}">
+
+            {# Form to save object #}
+            <form method="post" action="{{ path('app_dashboard_savecar') }}" id="carForm"
+                  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="carName">Name *</label>
+                    <input id="carName" class="form-control" type="text" name="name"
+                           {% if item.name|default %}value="{{ item.name }}"{% endif %} required>
+                </div>
+
+                <div class="form-group">
+                    <label for="carDescription">Description</label>
+                    <textarea id="carDescription" class="form-control"
+                              name="description">{% if item.description|default %}{{ item.description }}{% endif %}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="carColor">Color</label>
+                    <input id="carColor" class="form-control" type="text" name="color"
+                           {% if item.color|default %}value="{{ item.color }}"{% endif %} >
+                </div>
+
+                <div class="form-group">
+                    <label for="carPrice">Price (in EUR cents)</label>
+                    <input id="carPrice" class="form-control" type="number" name="price"
+                           value="{% if item.price|default %}{{ item.price }}{% else %}0{% endif %}" >
+                </div>
+
+                <div class="form-group">
+                    <label for="carRentable">Rentable (how many cars are available for rent)</label>
+                    <input id="carRentable" class="form-control" type="number" name="rentable"
+                           value="{% if item.rentable|default %}{{ item.rentable }}{% else %}0{% endif %}" >
+                </div>
+
+
+                <div class="form-group">
+
+                    {% if item.image|default %}
+                        <label for="carImage">Change image</label>
+                        <input id="carImage" class="form-control" type="file" name="image">
+                        <input id="carImage" class="form-control" type="hidden" name="image" value="{{ item.image }}">
+                    {% else %}
+                        <label for="carImage">Choose image</label>
+                        <input id="carImage" class="form-control" type="file" name="image">
+                    {% endif %}
+                </div>
+
+                <img style="margin-bottom: 1rem; display: none" src="" id="previewImg" alt="previewImg" width="100%">
+
+                <label>Features</label>
+                <div class="w-100 mb-3">
+                    <input type="text" class="form-control d-inline-block" id="addFeatureInput" style="width: 74%" onsubmit="return addFeature()">
+                    <button type="button" onclick="addFeature()" id="addFeatureButton" class="form-control w-40 d-inline-block hover-cursor"
+                            style="width: 24%">Add feature
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <ul id="featuresDiv">
+                        {% if item.features|default %}
+                            {% for feature in item.features %}
+                                <li class="my-2" id="featureLi{{ loop.index }}">{{ feature }} <button type="button" class="float-right" onclick="removeFeature({{ loop.index }})"><i class="fa fa-trash"></i></button></li>
+                                <input id="featureInput{{ loop.index }}" type="hidden" name="features[]" value="{{ feature }}">
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+
+                </div>
+
+                <div class="form-group">
+                    {% if item.id|default %}
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                    {% endif %}
+                    <button type="submit" class="form-control col-md-4 hover-cursor">Opslaan</button>
+                </div>
+            </form>
+        </div>
+        {% if item.image|default %}
+            <div class="col-12 col-md-6">
+                {% if item.image|default %}
+                    <img style="margin-top: 32px" src="{{ item.image }}" alt="{{ item.name }}" width="100%">
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        var previewImg = document.getElementById('previewImg');
+        var carImageInput = document.getElementById('carImage');
+        var addFeatureInput = document.getElementById('addFeatureInput');
+        var featuresDiv = document.getElementById('featuresDiv');
+        var addFeatureButton = document.getElementById('addFeatureButton');
+        var carForm = document.getElementById('carForm');
+        var featureCount = 0;
+
+        {% if item.features|default %}
+        featureCount = {{ item.features|length }};
+        {% endif %}
+
+        // To-do check file type
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    previewImg.setAttribute('src', e.target.result);
+                    previewImg.style.display = 'block';
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        carImageInput.addEventListener('input', function () {
+            readURL(this);
+        });
+
+        function addFeature() {
+            if (addFeatureInput.value != '') {
+                let li = document.createElement('li');
+                li.classList.add('my-2');
+                li.id = 'featureLi' + featureCount;
+                li.innerHTML = addFeatureInput.value + "<button type=\"button\" class=\"float-right\" onclick=\"removeFeature(" + featureCount + ")\"><i class=\"fa fa-trash\"></i></button>";
+                featuresDiv.append(li);
+
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'features[]';
+                input.value = addFeatureInput.value;
+                featuresDiv.append(input);
+                featureCount = featureCount + 1;
+            }
+            addFeatureInput.focus();
+            addFeatureInput.value = '';
+        }
+
+        function removeFeature(index) {
+            let li = document.getElementById('featureLi' + index);
+            let input = document.getElementById('featureInput' + index);
+            li.parentNode.removeChild(li);
+            input.parentNode.removeChild(input);
+        }
+    </script>
+
+{% endblock %}

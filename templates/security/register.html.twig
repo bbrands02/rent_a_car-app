@@ -1,0 +1,104 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+    {#            {% if error %}#}
+    {#                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+    {#            {% endif %}#}
+
+    <div class="col-md-12">
+        <form method="post" action="{{ path('app_security_makeuser') }}">
+            <h1>Register here</h1>
+
+            <br>
+
+            <h4 class="mb-3">Personal data</h4>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="firstNameInput">First name * <i id="firstNameFeedbackI"
+                                                                    class="fa fa-warning input-feedback-i"></i></label>
+                        <input id="firstNameInput" onkeyup="validateText(this)" class="form-control" type="text"
+                                 name="firstName" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="middleNameInput">Middle name <i id="middleNameFeedbackI"
+                                                                    class="fa fa-warning input-feedback-i"></i></label>
+                        <input id="middleNameInput" onkeyup="validateText(this)" class="form-control" type="text"
+                                 name="middleName" autocomplete="off" >
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="lastNameInput">Last name * <i id="lastNameFeedbackI"
+                                                                  class="fa fa-warning input-feedback-i"></i></label>
+                        <input id="lastNameInput" onkeyup="validateText(this)" class="form-control" type="text"
+                                 name="lastName" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <p style="color: red; display: none" id="emailFeedbackP" class="input-feedback">Given email is invalid.</p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="emailInput">E-mail * <i id="emailFeedbackI"
+                                                            class="fa fa-warning input-feedback-i"></i></label>
+                        <input id="emailInput" onkeyup="validateEmail()" class="form-control" type="text" name="emails[]"
+                               autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="phoneNumberInput">Phone number</label>
+                        <input id="phoneNumberInput" class="form-control" type="tel" autocomplete="off" name="phoneNumbers[]" >
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <p id="passwordFeedbackP" class="input-feedback">Passwords are not identical.</p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="passwordInput">Password * <i id="passwordFeedbackI"
+                                                                 class="fa fa-warning input-feedback-i"></i></label>
+                        <input id="passwordInput" onkeyup="validatePasswords()" class="form-control" type="password"
+                               name="password" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="confirmPasswordInput">Confirm password * <i id="confirmPasswordFeedbackI"
+                                                                                class="fa fa-warning input-feedback-i"></i></label>
+                        <input id="confirmPasswordInput" onkeyup="validatePasswords()" class="form-control"
+                               type="password" name="passwordConfirm" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <button id="registerButton" class="btn btn-lg btn-primary submit-button" type="submit">
+                    Register
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="{{ asset('js/validateinputelements.js') }}"></script>
+
+{% endblock %}

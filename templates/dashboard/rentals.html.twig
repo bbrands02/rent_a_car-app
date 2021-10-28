@@ -1,0 +1,97 @@
+{% extends 'body.html.twig' %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h3 class="mb-3">Rentals</h3>
+
+        <div id="filterButtonDiv">
+            <button onclick="filterStatus('Pending'); setActive(this)" class="submit-button submit-button-sm float-right ml-2">
+                Pending
+            </button>
+            <button onclick="filterStatus('Accepted'); setActive(this)" class="submit-button submit-button-sm float-right ml-2">
+                Accepted
+            </button>
+            <button onclick="filterStatus('Ready'); setActive(this)" class="submit-button submit-button-sm float-right ml-2">Ready
+            </button>
+            <button onclick="filterStatus('Rented'); setActive(this)" class="submit-button submit-button-sm float-right ml-2">Rented
+            </button>
+            <button onclick="filterStatus('Returned'); setActive(this)" class="submit-button submit-button-sm float-right ml-2">
+                Returned
+            </button>
+            <button onclick="filterStatus('Finished'); setActive(this)" class="submit-button submit-button-sm float-right ml-2">
+                Finished
+            </button>
+        </div>
+
+        {# <form action="{{ path('app_dashboard_rentals', {'id': 'new'}) }}"> #}
+        {# <button class="submit-button"><i class="fa fa-plus"></i></button> #}
+        {# </form> #}
+    </div>
+
+
+    <table id="rentalTable" class="table">
+        <thead>
+        <tr>
+            <th>Renter</th>
+            <th>Car</th>
+            <th>Status</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if rentals|default %}
+            {% for rental in rentals %}
+                <tr>
+                    <td>{{ rental.rentedBy.firstName~' '~rental.rentedBy.lastName }}</td>
+                    <td>{{ rental.car.name }}</td>
+                    <td>{{ rental.status|capitalize }}</td>
+                    <td>{{ rental.startDate|date }}</td>
+                    <td>{{ rental.endDate|date }}</td>
+                    <td class="align-middle"><a href="{{ path('app_dashboard_rental', {id: rental.id}) }}">View</a> </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>No rentals found</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <script>
+        function setActive(button) {
+            let buttonsDiv = document.getElementById('filterButtonDiv');
+            let buttons = buttonsDiv.getElementsByTagName("button");
+            for (i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('custom-active');
+            }
+            button.classList.add('custom-active');
+        }
+
+        function filterStatus(status) {
+            var table, tr, td, i, txtValue;
+            table = document.getElementById("rentalTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue == status) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+{% endblock %}

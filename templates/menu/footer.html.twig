@@ -1,0 +1,42 @@
+<div class="footer-background">
+    <footer id="footer-wrapper" class="col-xs-12 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2 p-5">
+
+        <div class="row">
+            <div class="footer-part col-12 col-sm-4">
+                <h4>Menu</h4>
+                <ul class="footer-menu ">
+                    <li><a href="{{ path('app_home_index') }}"><i class="fa fa-arrow-right p-2"></i>Home </a></li>
+                    <li><a href="{{ path('app_car_index') }}"><i class="fa fa-arrow-right p-2"></i>Cars </a></li>
+                    <li><a href="#"><i class="fa fa-arrow-right p-2"></i>Contact </a></li>
+                    {% if app.user is not empty %}
+                        <li><a href="{{ path('app_security_user') }}"><i class="fa fa-arrow-right p-2"></i>Profile</a>
+                        </li>
+                        {% if app.user.roles|default and 'ROLE_ADMIN' in app.user.roles %}
+                            <li><a href="{{ path('app_dashboard_index') }}"><i class="fa fa-arrow-right p-2"></i>Dashboard</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="{{ path('app_login') }}"><i class="fa fa-arrow-right p-2"></i>Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="footer-part col-12 col-sm-4">
+                <h4>Contact</h4>
+                <ul class="footer-menu">
+                    <li><a href="tel:+31 12345678"><i class="fa fa-phone p-2"></i>+31 12345678 </a></li>
+                    <li><a href="mailto:info@rentacar.com"><i class="fa fa-mail-forward p-2"></i>info@rentacar.com</a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-location-arrow p-2"></i>1234 AB, Amsterdam </a></li>
+                    <li><a href="#"><i class="fa fa-location-arrow p-2"></i>Appelstraat 21 </a></li>
+                </ul>
+            </div>
+
+            <div class="footer-part col-12 col-sm-4">
+                <h4>Location</h4>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.552436457872!2d5.218362866332397!3d52.37168872812434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c616e105389d67%3A0x87b714002313b299!2sSchutterstraat%206%2C%201315%20HA%20Almere!5e0!3m2!1snl!2snl!4v1604960582679!5m2!1snl!2snl" width="100%" height="225px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,33 @@
+<div class="header-background">
+    <header id="header-wrapper" class="col-xs-12 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2 pl-5 pt-5 pr-5">
+        <div class="row d-flex justify-content-center">
+
+            <h1 class="title text-center"><a class="main-title" href="{{ path('app_home_index') }}">{{ app_name }}</a></h1>
+
+            <ul class="menu col-12 d-flex justify-content-between">
+                <li><a href="{{ path('app_home_index') }}">Home</a></li>
+                <li><a href="{{ path('app_car_index') }}">Cars</a></li>
+                <li><a href="#">Contact</a></li>
+				{% if app.user is not null %}
+				    <li>
+					    <a href="{{ path('app_rental_index') }}">My Rentals</a>
+				    </li>
+                    <li class="user-link"><i style="padding-left: 10px" class="fa fa-user"></i> <a
+                                href="{{ path('app_security_user') }}">Profile</a></li>
+                    {% if app.user.roles|default and 'ROLE_ADMIN' in app.user.roles %}
+                    <li class="user-link"><i style="padding-left: 10px" class="fa fa-line-chart"></i> <a
+                                href="{{ path('app_dashboard_index') }}">Dashboard</a></li>
+                    {% endif %}
+                    <li class="user-link"><a href="{{ path('app_logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="user-link"><a href="{{ path('app_login') }}">Login</a></li>
+                {% endif %}
+                <li>
+                    <button id="darkModeButton" onclick="toggleDarkMode()"><i style="font-size: 30px"
+                                                                              class="fa fa-lightbulb-o"></i></button>
+                </li>
+            </ul>
+
+        </div>
+    </header>
+</div>
